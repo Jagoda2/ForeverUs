@@ -1,0 +1,1329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forever Us — 20</title>
+
+<style>
+:root{
+  --bg:#070707;
+  --cream:#f7f1e7;
+  --gold:#d8ad61;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--cream);
+  font-family:Georgia,"Times New Roman",serif;
+}
+
+body{touch-action:none}
+button{font:inherit}
+
+.screen{
+  position:absolute;
+  inset:0;
+  padding:clamp(16px,3.2vw,48px) clamp(16px,4vw,55px) 92px;
+  display:grid;
+  place-items:center;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(28px) scale(.985);
+  filter:blur(7px);
+  transition:
+    opacity .6s ease,
+    transform .9s cubic-bezier(.16,1,.3,1),
+    filter .6s ease,
+    visibility .6s;
+}
+
+.screen.active{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  filter:none;
+}
+
+.screen.leaving{
+  transform:translateY(-25px) scale(1.01);
+  opacity:0;
+}
+
+.wrap{
+  position:relative;
+  z-index:3;
+  width:min(900px,94vw);
+  max-height:calc(100svh - 104px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+.k{
+  font:600 .66rem/1.35 Arial,sans-serif;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0 0 12px;
+  flex:0 0 auto;
+}
+
+h1{
+  font-size:clamp(2.25rem,7.5vw,6.5rem);
+  line-height:.9;
+  font-weight:500;
+  margin:0 0 14px;
+  letter-spacing:-.035em;
+}
+
+h2{
+  font-size:clamp(1.45rem,3.7vw,3.25rem);
+  line-height:1.04;
+  font-weight:500;
+  margin:0 0 12px;
+}
+
+p{
+  font-size:clamp(.9rem,1.55vw,1.18rem);
+  line-height:1.58;
+  max-width:720px;
+  margin:0 auto 12px;
+  color:#eee7dc;
+}
+
+.gold-line{
+  width:0;
+  height:1px;
+  background:var(--gold);
+  margin:14px auto;
+  transition:width 1s ease .2s;
+}
+
+.active .gold-line{width:85px}
+
+.enter{
+  margin-top:10px;
+  border:1px solid #d8ad6166;
+  background:#d8ad6110;
+  color:#fff;
+  border-radius:999px;
+  padding:11px 21px;
+  cursor:pointer;
+  position:relative;
+  z-index:10;
+}
+
+.media{
+  position:relative;
+  width:min(760px,92vw);
+  height:min(56svh,570px);
+  max-height:56svh;
+  margin:0 auto;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid #ffffff22;
+  background:#050505;
+  box-shadow:0 30px 80px #000b;
+  transform:translateY(18px) scale(.985);
+  transition:1s cubic-bezier(.16,1,.3,1) .08s;
+  flex:0 1 auto;
+}
+
+.active .media{transform:none}
+
+.media img,
+.media video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#050505;
+  display:block;
+}
+
+.media:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 48%,rgba(0,0,0,.78));
+  pointer-events:none;
+}
+
+.caption{
+  position:absolute;
+  z-index:3;
+  left:20px;
+  right:20px;
+  bottom:17px;
+  text-align:left;
+  opacity:0;
+  transform:translateY(12px);
+  transition:.7s ease .35s;
+}
+
+.active .caption{
+  opacity:1;
+  transform:none;
+}
+
+.caption h2{
+  margin:0 0 3px;
+  text-shadow:0 2px 15px #000;
+}
+
+.caption p{
+  font-size:.92rem;
+  margin:0;
+  text-shadow:0 2px 12px #000;
+}
+
+.letter{
+  width:100%;
+  max-height:calc(100svh - 128px);
+  overflow:auto;
+  text-align:left;
+  padding:clamp(17px,3vw,34px);
+  border:1px solid #d8ad6138;
+  border-radius:21px;
+  background:linear-gradient(145deg,#19150fdd,#0e0d0bdd);
+  backdrop-filter:blur(14px);
+  box-shadow:0 25px 80px #0008;
+  scrollbar-width:thin;
+}
+
+.letter p{
+  max-width:none;
+  font-size:clamp(.82rem,1.35vw,1.03rem);
+  line-height:1.62;
+  margin-bottom:.78em;
+}
+
+.letter .close{
+  text-align:center;
+  color:var(--gold);
+  font-size:clamp(1rem,1.8vw,1.25rem);
+  margin-top:18px;
+}
+
+.letter.reveal{
+  animation:letterIn 1s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes letterIn{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:none}
+}
+
+.num{
+  font:700 clamp(7rem,24vw,16rem)/.72 Arial,sans-serif;
+  color:transparent;
+  -webkit-text-stroke:1px #d8ad61aa;
+  animation:numberGlow 2.8s ease-in-out infinite;
+}
+
+@keyframes numberGlow{
+  50%{
+    text-shadow:0 0 70px #d8ad6138;
+    transform:scale(1.035);
+  }
+}
+
+.heart{
+  font-size:clamp(2.3rem,6vw,5rem);
+  animation:heart 1.7s ease-in-out infinite;
+}
+
+@keyframes heart{
+  50%{transform:scale(1.12)}
+}
+
+#nav{
+  position:fixed;
+  z-index:20;
+  bottom:max(14px,env(safe-area-inset-bottom));
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  gap:9px;
+}
+
+#nav button{
+  width:42px;
+  height:42px;
+  padding:0;
+  border-radius:50%;
+  border:1px solid #fff2;
+  background:#080808bb;
+  color:#fff;
+  cursor:pointer;
+  backdrop-filter:blur(12px);
+}
+
+#dots{
+  position:fixed;
+  z-index:20;
+  top:max(14px,env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:5px;
+}
+
+.dot{
+  width:6px;
+  height:6px;
+  border-radius:8px;
+  background:#ffffff38;
+  cursor:pointer;
+  transition:.35s;
+}
+
+.dot.active{
+  width:21px;
+  background:#d8ad61;
+}
+
+#musicStatus{
+  position:fixed;
+  z-index:21;
+  right:14px;
+  bottom:max(16px,env(safe-area-inset-bottom));
+  font:10px Arial,sans-serif;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#ffffff88;
+  cursor:pointer;
+}
+
+#musicStatus span{color:#d8ad61}
+
+#particles{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.particle{
+  position:absolute;
+  bottom:-20px;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#d8ad61;
+  animation:floatParticle 12s linear infinite;
+}
+
+@keyframes floatParticle{
+  0%{
+    transform:translateY(0);
+    opacity:0;
+  }
+  15%{opacity:.5}
+  85%{opacity:.35}
+  100%{
+    transform:translateY(-110vh) translateX(30px);
+    opacity:0;
+  }
+}
+
+.burst{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.confetti{
+  position:absolute;
+  width:7px;
+  height:13px;
+  top:45%;
+  left:50%;
+  opacity:0;
+  animation:confetti 1.7s cubic-bezier(.12,.8,.3,1) forwards;
+}
+
+@keyframes confetti{
+  0%{
+    opacity:1;
+    transform:translate(-50%,-50%) rotate(0);
+  }
+  100%{
+    opacity:0;
+    transform:
+      translate(
+        calc(-50% + var(--x)),
+        calc(-50% + var(--y))
+      )
+      rotate(var(--r));
+  }
+}
+
+#birthday .wrap{overflow:visible}
+
+#final .media{
+  height:min(43svh,430px);
+  max-height:43svh;
+}
+
+#us .media{
+  height:min(42svh,450px);
+  max-height:42svh;
+}
+
+#sinners .media{
+  height:min(35svh,360px);
+  max-height:35svh;
+}
+
+#sobi .media{
+  height:min(57svh,590px);
+  max-height:57svh;
+}
+
+#surprise .media{
+  height:min(55svh,560px);
+  max-height:55svh;
+}
+
+@media(max-width:600px){
+
+  .screen{
+    padding:14px 12px 86px;
+  }
+
+  .wrap{
+    max-height:calc(100svh - 96px);
+    width:96vw;
+  }
+
+  h1{
+    font-size:clamp(2.15rem,12vw,4rem);
+  }
+
+  h2{
+    font-size:clamp(1.35rem,7.2vw,2.4rem);
+  }
+
+  p{
+    font-size:.88rem;
+    line-height:1.5;
+    margin-bottom:9px;
+  }
+
+  .media{
+    border-radius:15px;
+  }
+
+  #sobi .media{
+    height:45svh;
+    max-height:45svh;
+  }
+
+  #sinners .media{
+    height:30svh;
+    max-height:30svh;
+  }
+
+  #us .media{
+    height:34svh;
+    max-height:34svh;
+  }
+
+  #surprise .media{
+    height:45svh;
+    max-height:45svh;
+  }
+
+  #final .media{
+    height:39svh;
+    max-height:39svh;
+  }
+
+  .letter{
+    max-height:calc(100svh - 108px);
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .letter p{
+    font-size:.78rem;
+    line-height:1.52;
+    margin-bottom:.68em;
+  }
+
+  .letter .close{
+    font-size:1rem;
+  }
+
+  #musicStatus{
+    display:none;
+  }
+}
+
+@media(max-height:650px){
+
+  h1{
+    font-size:clamp(2rem,7vw,4.5rem);
+  }
+
+  h2{
+    font-size:clamp(1.3rem,3.4vw,2.6rem);
+  }
+
+  p{
+    font-size:.82rem;
+    line-height:1.42;
+  }
+
+  #sobi .media{
+    height:45svh;
+    max-height:45svh;
+  }
+
+  #surprise .media{
+    height:43svh;
+    max-height:43svh;
+  }
+
+  #us .media{
+    height:32svh;
+    max-height:32svh;
+  }
+
+  #final .media{
+    height:34svh;
+    max-height:34svh;
+  }
+
+  .letter p{
+    font-size:.76rem;
+    line-height:1.45;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<section class="screen active" id="intro">
+  <div class="wrap">
+    <div class="k">A little story about us</div>
+
+    <h1>For my Guguru Girl</h1>
+
+    <div class="gold-line"></div>
+
+    <p>
+      Not just a website. Just a little place for the memories,
+      the love, the hard days and the good days.
+    </p>
+
+    <button class="enter" type="button" id="enterStory">
+      Enter our story →
+    </button>
+  </div>
+</section>
+
+
+<section class="screen" id="sobi">
+  <div class="wrap">
+
+    <div class="k">A memory I'll always keep</div>
+
+    <div class="media">
+      <video
+        src="media/sobi-hill.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto">
+      </video>
+
+      <div class="caption">
+        <h2>Sobi Hills</h2>
+        <p>
+          The day I stayed back with you, held your hand,
+          guided you up and made sure you got there safely.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="screen" id="sinners">
+  <div class="wrap">
+
+    <div class="k">One of our little moments</div>
+
+    <h2>Sinners</h2>
+
+    <p>
+      Our first unofficial date. A movie, a little excuse to be close,
+      and one of those moments that became a memory without us even trying.
+    </p>
+
+    <div class="media">
+      <video
+        src="media/sinners.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto">
+      </video>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="screen" id="us">
+  <div class="wrap">
+
+    <div class="k">US</div>
+
+    <div
+      class="media"
+      style="height:min(54vh,560px);margin-bottom:18px">
+
+      <img
+        src="media/us-museum.jpg"
+        alt="A memory from our story">
+    </div>
+
+    <h2>Somewhere along the way, you became home.</h2>
+
+    <p>
+      We became us, had beautiful days, difficult days,
+      and somehow kept finding our way back to each other.
+    </p>
+
+  </div>
+</section>
+
+
+<section class="screen" id="surprise">
+  <div class="wrap">
+
+    <div class="k">21 · 07 · 2026</div>
+
+    <div class="media">
+
+      <img
+        src="media/birthday-surprise.jpg"
+        alt="The birthday surprise">
+
+      <div class="caption">
+        <h2>You planned this behind my back.</h2>
+
+        <p>
+          You quietly planned a surprise with your friends without me
+          knowing anything about it, and somehow you took one of the
+          worst moments of my life and made it one of the best times
+          of my life. I appreciate you more than I can properly explain.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="screen" id="letterScreen">
+  <div class="wrap">
+
+    <div class="k">For the woman I love</div>
+
+    <div class="letter">
+
+      <p><strong>My love</strong></p>
+
+      <p>
+        We’ve come a long way since our first encounter a few years back
+        and I find myself falling in love with you, every single day,
+        over and over again.
+      </p>
+
+      <p>
+        I love how deeply you care about the people you love, like not
+        being able to breathe because you’ve not gone home in a while 😅.
+        And I hope you know that I notice the little things, when you
+        check up on me, when you worry about me, when you try to make me
+        feel better even when you have your own things going on.
+      </p>
+
+      <p>
+        You have this way of making me feel like I don’t have to have
+        everything figured out at all times, and that means more to me
+        than I can properly explain. I want you to know that I’m proud
+        of the things you care about, the things you dream about and
+        the woman you’re constantly becoming.
+      </p>
+
+      <p>
+        I want to see you win, I want to see Ember &amp; Spice become
+        something we’re proud of, and I want to see you achieve the
+        things you’ve told me about and the things you haven’t even
+        thought of yet.
+      </p>
+
+      <p>
+        Thank you for loving me the way you do, thank you for celebrating
+        me in the most intentional way ever, you made one of my worst
+        moments the best time of my life with your kind gestures.
+        Thank you for being patient with me, even though I tend to be
+        stubborn at times, thank you for believing in me, thank you for
+        making me feel loved, thank you for taking out of your little or
+        no time to cook for me, and every other little thing you probably
+        don’t even remember but I do.
+      </p>
+
+      <p>
+        Thank you for always giving me hope and engaging me with prayers
+        and fasting when I feel like everything is going south. When I
+        feel like everything is falling apart, you remind me to pray,
+        to have faith and to keep going. That means more to me than I
+        can properly explain.
+      </p>
+
+      <p>
+        You’re such a visionary young lady with potentials, and I pray
+        that Allah protects your heart and gives you peace, happiness
+        and success in everything you set your hands on, and gives you
+        the strength to become everything you’re meant to be ❤️.
+      </p>
+
+      <p>
+        Thank you for always listening to me my lady, I am genuinely
+        grateful for you being in my life, grateful that I get to love
+        you, grateful that I get to call you mine. And if I don’t say
+        it enough,
+      </p>
+
+      <p><strong>I Love You</strong></p>
+
+      <p>
+        Not just when things are easy, not just when everything is going
+        perfectly, I love you through the ordinary days, the boring days,
+        days where we annoy each other, days where we don’t have much to
+        say, because loving you isn’t something I only feel when
+        everything is perfect.
+      </p>
+
+      <p><strong>It has become a part of me.</strong></p>
+
+      <p>
+        Happy 20th birthday my darling, and I hope this year gives you
+        everything your heart has been quietly asking for, and I hope
+        when you look back one day, you realize just how many people
+        were cheering for you along the way!
+      </p>
+
+      <p>
+        I’ll always be your #1 supporter.
+      </p>
+
+      <p class="close">
+        I love you, Guguru girl.
+        <br><br>
+        My C.E.O to be ❤️
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="screen" id="birthday">
+
+  <div class="burst"></div>
+
+  <div class="wrap">
+
+    <div class="heart">♡</div>
+
+    <div class="k">Today, you are</div>
+
+    <div class="num">20</div>
+
+    <h2>Happy 20th Birthday, my love.</h2>
+
+    <p>
+      May this be the beginning of a beautiful new year of your life.
+    </p>
+
+  </div>
+</section>
+
+
+<section class="screen" id="final">
+  <div class="wrap">
+
+    <div class="k">Forever us</div>
+
+    <div class="media">
+
+      <img
+        src="media/final-us.jpg"
+        alt="Us">
+
+    </div>
+
+    <h2>And this is only the beginning.</h2>
+
+    <p>
+      More memories, more laughter, more ordinary days,
+      and more reasons to choose you.
+    </p>
+
+  </div>
+</section>
+
+
+<audio
+  id="music"
+  src="media/moth-to-a-flame.m4a"
+  loop
+  preload="auto">
+</audio>
+
+
+<div id="dots"></div>
+
+
+<div id="nav">
+
+  <button
+    type="button"
+    id="prevBtn"
+    aria-label="Previous">
+    ←
+  </button>
+
+  <button
+    type="button"
+    id="nextBtn"
+    aria-label="Next">
+    →
+  </button>
+
+</div>
+
+
+<div
+  id="musicStatus"
+  onclick="toggleMusic()">
+  ♫ <span id="musicText">music</span>
+</div>
+
+
+<script>
+(function () {
+
+  "use strict";
+
+  const screens =
+    Array.from(document.querySelectorAll(".screen"));
+
+  const dots =
+    document.getElementById("dots");
+
+  const music =
+    document.getElementById("music");
+
+  const musicText =
+    document.getElementById("musicText");
+
+  const enterStory =
+    document.getElementById("enterStory");
+
+  const prevBtn =
+    document.getElementById("prevBtn");
+
+  const nextBtn =
+    document.getElementById("nextBtn");
+
+  const particles =
+    document.getElementById("particles");
+
+
+  let index = 0;
+  let startX = 0;
+
+
+  /*
+    CREATE TOP PROGRESS DOTS
+  */
+
+  screens.forEach(function (_, i) {
+
+    const dot =
+      document.createElement("span");
+
+    dot.className =
+      "dot" + (i === 0 ? " active" : "");
+
+    dot.setAttribute(
+      "aria-label",
+      "Go to section " + (i + 1)
+    );
+
+    dot.addEventListener(
+      "click",
+      function () {
+        go(i);
+      }
+    );
+
+    dots.appendChild(dot);
+
+  });
+
+
+  /*
+    FLOATING PARTICLES
+  */
+
+  for (let i = 0; i < 34; i++) {
+
+    const p =
+      document.createElement("i");
+
+    p.className = "particle";
+
+    p.style.left =
+      Math.random() * 100 + "%";
+
+    p.style.animationDuration =
+      8 + Math.random() * 13 + "s";
+
+    p.style.animationDelay =
+      -Math.random() * 18 + "s";
+
+    particles.appendChild(p);
+
+  }
+
+
+  /*
+    UPDATE DOTS
+  */
+
+  function updateDots() {
+
+    Array.from(dots.children)
+      .forEach(function (dot, i) {
+
+        dot.classList.toggle(
+          "active",
+          i === index
+        );
+
+      });
+
+  }
+
+
+  /*
+    MUSIC
+  */
+
+  function startMusic() {
+
+    if (!music) return;
+
+    music.volume = 0.20;
+
+    music.play()
+      .then(function () {
+
+        musicText.textContent =
+          "playing";
+
+      })
+      .catch(function () {
+
+        musicText.textContent =
+          "tap for music";
+
+      });
+
+  }
+
+
+  function toggleMusic() {
+
+    if (!music) return;
+
+    if (music.paused) {
+
+      startMusic();
+
+    } else {
+
+      music.pause();
+
+      musicText.textContent =
+        "paused";
+
+    }
+
+  }
+
+
+  /*
+    BIRTHDAY CONFETTI
+  */
+
+  function birthdayBurst() {
+
+    const burst =
+      document.querySelector(
+        "#birthday .burst"
+      );
+
+    if (!burst) return;
+
+    burst.innerHTML = "";
+
+    for (let n = 0; n < 32; n++) {
+
+      const c =
+        document.createElement("i");
+
+      c.className =
+        "confetti";
+
+      c.style.setProperty(
+        "--x",
+        Math.random() * 700 - 350 + "px"
+      );
+
+      c.style.setProperty(
+        "--y",
+        Math.random() * 520 - 260 + "px"
+      );
+
+      c.style.setProperty(
+        "--r",
+        Math.random() * 900 - 450 + "deg"
+      );
+
+      c.style.background =
+        n % 3 === 0
+          ? "#d8ad61"
+          : n % 3 === 1
+            ? "#fff"
+            : "#b88a45";
+
+      c.style.animationDelay =
+        Math.random() * .18 + "s";
+
+      burst.appendChild(c);
+
+    }
+
+  }
+
+
+  /*
+    MAIN SCREEN NAVIGATION
+
+    This is deliberately defined before
+    the Enter Our Story button is used.
+  */
+
+  function go(n) {
+
+    n =
+      Math.max(
+        0,
+        Math.min(
+          screens.length - 1,
+          n
+        )
+      );
+
+
+    if (
+      n === index &&
+      screens[n].classList.contains("active")
+    ) {
+
+      return;
+
+    }
+
+
+    const old =
+      screens[index];
+
+    old.classList.remove("active");
+
+    old.classList.add("leaving");
+
+
+    setTimeout(function () {
+
+      old.classList.remove("leaving");
+
+    }, 750);
+
+
+    index = n;
+
+    screens[index]
+      .classList.add("active");
+
+
+    updateDots();
+
+
+    /*
+      Automatically start muted
+      videos when their screen appears.
+    */
+
+    screens[index]
+      .querySelectorAll("video")
+      .forEach(function (video) {
+
+        video.muted = true;
+
+        video.currentTime = 0;
+
+        video.play()
+          .catch(function () {});
+
+      });
+
+
+    /*
+      Music starts after the user
+      has interacted with the page.
+    */
+
+    if (index > 0) {
+
+      startMusic();
+
+    }
+
+
+    if (
+      screens[index].id ===
+      "birthday"
+    ) {
+
+      birthdayBurst();
+
+    }
+
+
+    const letter =
+      screens[index]
+        .querySelector(".letter");
+
+
+    if (letter) {
+
+      letter.classList.remove(
+        "reveal"
+      );
+
+      void letter.offsetWidth;
+
+      letter.classList.add(
+        "reveal"
+      );
+
+    }
+
+  }
+
+
+  function next() {
+
+    go(index + 1);
+
+  }
+
+
+  function prev() {
+
+    go(index - 1);
+
+  }
+
+
+  /*
+    MAKE FUNCTIONS AVAILABLE
+    TO THE PAGE
+  */
+
+  window.go =
+    go;
+
+  window.next =
+    next;
+
+  window.prev =
+    prev;
+
+  window.toggleMusic =
+    toggleMusic;
+
+
+  /*
+    ENTER OUR STORY
+
+    This is the important fix.
+    The button has a direct event listener
+    and does not depend on inline onclick.
+  */
+
+  enterStory.addEventListener(
+    "click",
+    function (event) {
+
+      event.preventDefault();
+
+      go(1);
+
+      startMusic();
+
+    }
+  );
+
+
+  /*
+    ARROW BUTTONS
+  */
+
+  prevBtn.addEventListener(
+    "click",
+    function () {
+
+      prev();
+
+    }
+  );
+
+
+  nextBtn.addEventListener(
+    "click",
+    function () {
+
+      next();
+
+    }
+  );
+
+
+  /*
+    KEYBOARD NAVIGATION
+  */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key === "ArrowRight" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        next();
+
+      }
+
+
+      if (
+        event.key === "ArrowLeft"
+      ) {
+
+        event.preventDefault();
+
+        prev();
+
+      }
+
+    }
+  );
+
+
+  /*
+    SWIPE NAVIGATION
+  */
+
+  document.addEventListener(
+    "touchstart",
+    function (event) {
+
+      startX =
+        event.changedTouches[0].clientX;
+
+    },
+    { passive:true }
+  );
+
+
+  document.addEventListener(
+    "touchend",
+    function (event) {
+
+      const dx =
+        event.changedTouches[0].clientX -
+        startX;
+
+
+      if (Math.abs(dx) > 55) {
+
+        if (dx < 0) {
+
+          next();
+
+        } else {
+
+          prev();
+
+        }
+
+      }
+
+    },
+    { passive:true }
+  );
+
+
+  /*
+    START ON INTRO
+  */
+
+  go(0);
+
+})();
+</script>
+
+</body>
+</html>
