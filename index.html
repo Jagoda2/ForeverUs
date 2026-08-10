@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Forever Us — 20</title>
 
 <style>
@@ -10,11 +11,15 @@
   --bg:#070707;
   --cream:#f7f1e7;
   --gold:#d8ad61;
+  --muted:#bfb6a8;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-html,body{
+html,
+body{
   margin:0;
   width:100%;
   height:100%;
@@ -24,19 +29,37 @@ html,body{
   font-family:Georgia,"Times New Roman",serif;
 }
 
-body{touch-action:none}
-button{font:inherit}
+body{
+  touch-action:none;
+}
+
+button{
+  font:inherit;
+}
+
+
+/* =========================================================
+   SCREEN SYSTEM
+========================================================= */
 
 .screen{
   position:absolute;
   inset:0;
-  padding:clamp(16px,3.2vw,48px) clamp(16px,4vw,55px) 92px;
+
+  padding:
+    max(16px,env(safe-area-inset-top))
+    clamp(14px,4vw,55px)
+    max(82px,calc(70px + env(safe-area-inset-bottom)));
+
   display:grid;
   place-items:center;
+
   opacity:0;
   visibility:hidden;
+
   transform:translateY(28px) scale(.985);
   filter:blur(7px);
+
   transition:
     opacity .6s ease,
     transform .9s cubic-bezier(.16,1,.3,1),
@@ -56,33 +79,55 @@ button{font:inherit}
   opacity:0;
 }
 
+
+/* =========================================================
+   GENERAL WRAPPER
+========================================================= */
+
 .wrap{
   position:relative;
   z-index:3;
+
   width:min(900px,94vw);
-  max-height:calc(100svh - 104px);
+
+  max-height:calc(100svh - 105px);
+
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+
   text-align:center;
+
   overflow:hidden;
 }
 
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
 .k{
-  font:600 .66rem/1.35 Arial,sans-serif;
+  flex:0 0 auto;
+
+  font:
+    600 .66rem/1.35 Arial,sans-serif;
+
   letter-spacing:.28em;
   text-transform:uppercase;
+
   color:var(--gold);
+
   margin:0 0 12px;
-  flex:0 0 auto;
 }
 
 h1{
   font-size:clamp(2.25rem,7.5vw,6.5rem);
   line-height:.9;
   font-weight:500;
+
   margin:0 0 14px;
+
   letter-spacing:-.035em;
 }
 
@@ -90,296 +135,177 @@ h2{
   font-size:clamp(1.45rem,3.7vw,3.25rem);
   line-height:1.04;
   font-weight:500;
-  margin:0 0 12px;
+
+  margin:0 0 10px;
 }
 
 p{
   font-size:clamp(.9rem,1.55vw,1.18rem);
   line-height:1.58;
+
   max-width:720px;
+
   margin:0 auto 12px;
+
   color:#eee7dc;
 }
 
 .gold-line{
   width:0;
   height:1px;
+
   background:var(--gold);
+
   margin:14px auto;
+
   transition:width 1s ease .2s;
 }
 
-.active .gold-line{width:85px}
+.active .gold-line{
+  width:85px;
+}
+
+
+/* =========================================================
+   ENTER BUTTON
+========================================================= */
 
 .enter{
   margin-top:10px;
+
   border:1px solid #d8ad6166;
+
   background:#d8ad6110;
+
   color:#fff;
+
   border-radius:999px;
+
   padding:11px 21px;
+
   cursor:pointer;
+
   position:relative;
   z-index:10;
+
+  transition:
+    background .3s ease,
+    transform .3s ease,
+    border-color .3s ease;
 }
+
+.enter:hover{
+  background:#d8ad6120;
+  border-color:#d8ad61aa;
+  transform:translateY(-2px);
+}
+
+
+/* =========================================================
+   MEDIA BLOCK
+   IMAGE/VIDEO NOW HAS ITS OWN SPACE
+========================================================= */
 
 .media{
   position:relative;
+
   width:min(760px,92vw);
-  height:min(56svh,570px);
-  max-height:56svh;
+
+  height:min(50svh,500px);
+
+  max-height:50svh;
+
   margin:0 auto;
+
   border-radius:20px;
+
   overflow:hidden;
+
   border:1px solid #ffffff22;
+
   background:#050505;
+
   box-shadow:0 30px 80px #000b;
-  transform:translateY(18px) scale(.985);
-  transition:1s cubic-bezier(.16,1,.3,1) .08s;
+
+  transform:
+    translateY(18px)
+    scale(.985);
+
+  transition:
+    1s cubic-bezier(.16,1,.3,1) .08s;
+
   flex:0 1 auto;
 }
 
-.active .media{transform:none}
+.active .media{
+  transform:none;
+}
 
 .media img,
 .media video{
   width:100%;
   height:100%;
+
   object-fit:contain;
+
   background:#050505;
+
   display:block;
 }
 
-.media:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,transparent 48%,rgba(0,0,0,.78));
-  pointer-events:none;
-}
 
-.caption{
-  position:absolute;
-  z-index:3;
-  left:20px;
-  right:20px;
-  bottom:17px;
-  text-align:left;
+/* =========================================================
+   OUTSIDE CAPTION
+   THIS NO LONGER SITS ON THE IMAGE
+========================================================= */
+
+.outside-caption{
+  width:min(760px,92vw);
+
+  margin:14px auto 0;
+
+  text-align:center;
+
+  flex:0 0 auto;
+
   opacity:0;
+
   transform:translateY(12px);
-  transition:.7s ease .35s;
+
+  transition:
+    opacity .7s ease .3s,
+    transform .7s ease .3s;
 }
 
-.active .caption{
+.active .outside-caption{
   opacity:1;
   transform:none;
 }
 
-.caption h2{
-  margin:0 0 3px;
-  text-shadow:0 2px 15px #000;
+.outside-caption h2{
+  margin:0 0 6px;
+
+  font-size:clamp(1.35rem,3.2vw,2.45rem);
 }
 
-.caption p{
-  font-size:.92rem;
-  margin:0;
-  text-shadow:0 2px 12px #000;
+.outside-caption p{
+  margin:0 auto;
+
+  font-size:clamp(.8rem,1.35vw,1rem);
+
+  line-height:1.48;
+
+  color:var(--muted);
 }
 
-.letter{
-  width:100%;
-  max-height:calc(100svh - 128px);
-  overflow:auto;
-  text-align:left;
-  padding:clamp(17px,3vw,34px);
-  border:1px solid #d8ad6138;
-  border-radius:21px;
-  background:linear-gradient(145deg,#19150fdd,#0e0d0bdd);
-  backdrop-filter:blur(14px);
-  box-shadow:0 25px 80px #0008;
-  scrollbar-width:thin;
-}
 
-.letter p{
-  max-width:none;
-  font-size:clamp(.82rem,1.35vw,1.03rem);
-  line-height:1.62;
-  margin-bottom:.78em;
-}
+/* =========================================================
+   SPECIAL MEDIA SIZES
+========================================================= */
 
-.letter .close{
-  text-align:center;
-  color:var(--gold);
-  font-size:clamp(1rem,1.8vw,1.25rem);
-  margin-top:18px;
-}
-
-.letter.reveal{
-  animation:letterIn 1s cubic-bezier(.16,1,.3,1);
-}
-
-@keyframes letterIn{
-  from{opacity:0;transform:translateY(25px)}
-  to{opacity:1;transform:none}
-}
-
-.num{
-  font:700 clamp(7rem,24vw,16rem)/.72 Arial,sans-serif;
-  color:transparent;
-  -webkit-text-stroke:1px #d8ad61aa;
-  animation:numberGlow 2.8s ease-in-out infinite;
-}
-
-@keyframes numberGlow{
-  50%{
-    text-shadow:0 0 70px #d8ad6138;
-    transform:scale(1.035);
-  }
-}
-
-.heart{
-  font-size:clamp(2.3rem,6vw,5rem);
-  animation:heart 1.7s ease-in-out infinite;
-}
-
-@keyframes heart{
-  50%{transform:scale(1.12)}
-}
-
-#nav{
-  position:fixed;
-  z-index:20;
-  bottom:max(14px,env(safe-area-inset-bottom));
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:center;
-  gap:9px;
-}
-
-#nav button{
-  width:42px;
-  height:42px;
-  padding:0;
-  border-radius:50%;
-  border:1px solid #fff2;
-  background:#080808bb;
-  color:#fff;
-  cursor:pointer;
-  backdrop-filter:blur(12px);
-}
-
-#dots{
-  position:fixed;
-  z-index:20;
-  top:max(14px,env(safe-area-inset-top));
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:5px;
-}
-
-.dot{
-  width:6px;
-  height:6px;
-  border-radius:8px;
-  background:#ffffff38;
-  cursor:pointer;
-  transition:.35s;
-}
-
-.dot.active{
-  width:21px;
-  background:#d8ad61;
-}
-
-#musicStatus{
-  position:fixed;
-  z-index:21;
-  right:14px;
-  bottom:max(16px,env(safe-area-inset-bottom));
-  font:10px Arial,sans-serif;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:#ffffff88;
-  cursor:pointer;
-}
-
-#musicStatus span{color:#d8ad61}
-
-#particles{
-  position:fixed;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  overflow:hidden;
-}
-
-.particle{
-  position:absolute;
-  bottom:-20px;
-  width:3px;
-  height:3px;
-  border-radius:50%;
-  background:#d8ad61;
-  animation:floatParticle 12s linear infinite;
-}
-
-@keyframes floatParticle{
-  0%{
-    transform:translateY(0);
-    opacity:0;
-  }
-  15%{opacity:.5}
-  85%{opacity:.35}
-  100%{
-    transform:translateY(-110vh) translateX(30px);
-    opacity:0;
-  }
-}
-
-.burst{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
-
-.confetti{
-  position:absolute;
-  width:7px;
-  height:13px;
-  top:45%;
-  left:50%;
-  opacity:0;
-  animation:confetti 1.7s cubic-bezier(.12,.8,.3,1) forwards;
-}
-
-@keyframes confetti{
-  0%{
-    opacity:1;
-    transform:translate(-50%,-50%) rotate(0);
-  }
-  100%{
-    opacity:0;
-    transform:
-      translate(
-        calc(-50% + var(--x)),
-        calc(-50% + var(--y))
-      )
-      rotate(var(--r));
-  }
-}
-
-#birthday .wrap{overflow:visible}
-
-#final .media{
-  height:min(43svh,430px);
-  max-height:43svh;
-}
-
-#us .media{
-  height:min(42svh,450px);
-  max-height:42svh;
+#sobi .media{
+  height:min(48svh,500px);
+  max-height:48svh;
 }
 
 #sinners .media{
@@ -387,53 +313,454 @@ p{
   max-height:35svh;
 }
 
-#sobi .media{
-  height:min(57svh,590px);
-  max-height:57svh;
+#us .media{
+  height:min(42svh,440px);
+  max-height:42svh;
 }
 
 #surprise .media{
-  height:min(55svh,560px);
-  max-height:55svh;
+  height:min(48svh,510px);
+  max-height:48svh;
 }
+
+#final .media{
+  height:min(40svh,420px);
+  max-height:40svh;
+}
+
+
+/* =========================================================
+   HEARTFELT LETTER
+========================================================= */
+
+.letter{
+  width:100%;
+
+  max-height:calc(100svh - 128px);
+
+  overflow:auto;
+
+  text-align:left;
+
+  padding:clamp(17px,3vw,34px);
+
+  border:1px solid #d8ad6138;
+
+  border-radius:21px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #19150fdd,
+      #0e0d0bdd
+    );
+
+  backdrop-filter:blur(14px);
+
+  box-shadow:0 25px 80px #0008;
+
+  scrollbar-width:thin;
+}
+
+.letter p{
+  max-width:none;
+
+  font-size:clamp(.82rem,1.35vw,1.03rem);
+
+  line-height:1.62;
+
+  margin-bottom:.78em;
+}
+
+.letter .close{
+  text-align:center;
+
+  color:var(--gold);
+
+  font-size:clamp(1rem,1.8vw,1.25rem);
+
+  margin-top:18px;
+}
+
+.letter.reveal{
+  animation:
+    letterIn
+    1s
+    cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes letterIn{
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+
+/* =========================================================
+   BIRTHDAY
+========================================================= */
+
+.num{
+  font:
+    700 clamp(7rem,24vw,16rem)/.72
+    Arial,sans-serif;
+
+  color:transparent;
+
+  -webkit-text-stroke:
+    1px #d8ad61aa;
+
+  animation:
+    numberGlow
+    2.8s
+    ease-in-out
+    infinite;
+}
+
+@keyframes numberGlow{
+  50%{
+    text-shadow:
+      0 0 70px #d8ad6138;
+
+    transform:scale(1.035);
+  }
+}
+
+.heart{
+  font-size:clamp(2.3rem,6vw,5rem);
+
+  animation:
+    heart
+    1.7s
+    ease-in-out
+    infinite;
+}
+
+@keyframes heart{
+  50%{
+    transform:scale(1.12);
+  }
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+#nav{
+  position:fixed;
+
+  z-index:20;
+
+  bottom:
+    max(14px,env(safe-area-inset-bottom));
+
+  left:0;
+  right:0;
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:9px;
+}
+
+#nav button{
+  width:42px;
+  height:42px;
+
+  padding:0;
+
+  border-radius:50%;
+
+  border:1px solid #fff2;
+
+  background:#080808bb;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  backdrop-filter:blur(12px);
+
+  transition:
+    background .25s ease,
+    transform .25s ease;
+}
+
+#nav button:hover{
+  background:#ffffff18;
+  transform:scale(1.06);
+}
+
+
+/* =========================================================
+   DOTS
+========================================================= */
+
+#dots{
+  position:fixed;
+
+  z-index:20;
+
+  top:
+    max(14px,env(safe-area-inset-top));
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  gap:5px;
+}
+
+.dot{
+  width:6px;
+  height:6px;
+
+  border-radius:8px;
+
+  background:#ffffff38;
+
+  cursor:pointer;
+
+  transition:.35s;
+}
+
+.dot.active{
+  width:21px;
+
+  background:#d8ad61;
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+#musicStatus{
+  position:fixed;
+
+  z-index:21;
+
+  right:14px;
+
+  bottom:
+    max(16px,env(safe-area-inset-bottom));
+
+  font:
+    10px Arial,sans-serif;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+
+  color:#ffffff88;
+
+  cursor:pointer;
+}
+
+#musicStatus span{
+  color:#d8ad61;
+}
+
+
+/* =========================================================
+   FLOATING PARTICLES
+========================================================= */
+
+#particles{
+  position:fixed;
+
+  inset:0;
+
+  z-index:1;
+
+  pointer-events:none;
+
+  overflow:hidden;
+}
+
+.particle{
+  position:absolute;
+
+  bottom:-20px;
+
+  width:3px;
+  height:3px;
+
+  border-radius:50%;
+
+  background:#d8ad61;
+
+  animation:
+    floatParticle
+    12s
+    linear
+    infinite;
+}
+
+@keyframes floatParticle{
+
+  0%{
+    transform:
+      translateY(0);
+
+    opacity:0;
+  }
+
+  15%{
+    opacity:.5;
+  }
+
+  85%{
+    opacity:.35;
+  }
+
+  100%{
+    transform:
+      translateY(-110vh)
+      translateX(30px);
+
+    opacity:0;
+  }
+
+}
+
+
+/* =========================================================
+   BIRTHDAY CONFETTI
+========================================================= */
+
+.burst{
+  position:absolute;
+
+  inset:0;
+
+  pointer-events:none;
+}
+
+.confetti{
+  position:absolute;
+
+  width:7px;
+  height:13px;
+
+  top:45%;
+  left:50%;
+
+  opacity:0;
+
+  animation:
+    confetti
+    1.7s
+    cubic-bezier(.12,.8,.3,1)
+    forwards;
+}
+
+@keyframes confetti{
+
+  0%{
+    opacity:1;
+
+    transform:
+      translate(-50%,-50%)
+      rotate(0);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate(
+        calc(-50% + var(--x)),
+        calc(-50% + var(--y))
+      )
+      rotate(var(--r));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:600px){
 
   .screen{
-    padding:14px 12px 86px;
+    padding:
+      14px
+      12px
+      max(78px,calc(68px + env(safe-area-inset-bottom)));
   }
 
   .wrap{
-    max-height:calc(100svh - 96px);
     width:96vw;
+
+    max-height:
+      calc(100svh - 96px);
   }
 
   h1{
-    font-size:clamp(2.15rem,12vw,4rem);
+    font-size:
+      clamp(2.15rem,12vw,4rem);
   }
 
   h2{
-    font-size:clamp(1.35rem,7.2vw,2.4rem);
+    font-size:
+      clamp(1.35rem,7.2vw,2.4rem);
   }
 
   p{
-    font-size:.88rem;
+    font-size:.86rem;
     line-height:1.5;
     margin-bottom:9px;
   }
 
   .media{
+    width:96vw;
+
     border-radius:15px;
+
+    height:39svh;
+    max-height:39svh;
+  }
+
+  .outside-caption{
+    width:94vw;
+
+    margin-top:10px;
+  }
+
+  .outside-caption h2{
+    font-size:
+      clamp(1.2rem,6vw,2rem);
+
+    margin-bottom:4px;
+  }
+
+  .outside-caption p{
+    font-size:.78rem;
+
+    line-height:1.4;
   }
 
   #sobi .media{
-    height:45svh;
-    max-height:45svh;
+    height:39svh;
+    max-height:39svh;
   }
 
   #sinners .media{
-    height:30svh;
-    max-height:30svh;
+    height:29svh;
+    max-height:29svh;
   }
 
   #us .media{
@@ -442,24 +769,29 @@ p{
   }
 
   #surprise .media{
-    height:45svh;
-    max-height:45svh;
-  }
-
-  #final .media{
     height:39svh;
     max-height:39svh;
   }
 
+  #final .media{
+    height:34svh;
+    max-height:34svh;
+  }
+
   .letter{
-    max-height:calc(100svh - 108px);
+    max-height:
+      calc(100svh - 108px);
+
     padding:16px;
+
     border-radius:17px;
   }
 
   .letter p{
     font-size:.78rem;
+
     line-height:1.52;
+
     margin-bottom:.68em;
   }
 
@@ -472,39 +804,70 @@ p{
   }
 }
 
+
+/* =========================================================
+   SHORT SCREENS
+========================================================= */
+
 @media(max-height:650px){
 
   h1{
-    font-size:clamp(2rem,7vw,4.5rem);
+    font-size:
+      clamp(2rem,7vw,4.5rem);
   }
 
   h2{
-    font-size:clamp(1.3rem,3.4vw,2.6rem);
+    font-size:
+      clamp(1.3rem,3.4vw,2.6rem);
   }
 
   p{
-    font-size:.82rem;
-    line-height:1.42;
+    font-size:.8rem;
+
+    line-height:1.4;
+  }
+
+  .media{
+    height:35svh;
+    max-height:35svh;
   }
 
   #sobi .media{
-    height:45svh;
-    max-height:45svh;
+    height:34svh;
+    max-height:34svh;
   }
 
-  #surprise .media{
-    height:43svh;
-    max-height:43svh;
+  #sinners .media{
+    height:27svh;
+    max-height:27svh;
   }
 
   #us .media{
-    height:32svh;
-    max-height:32svh;
+    height:29svh;
+    max-height:29svh;
+  }
+
+  #surprise .media{
+    height:34svh;
+    max-height:34svh;
   }
 
   #final .media{
-    height:34svh;
-    max-height:34svh;
+    height:29svh;
+    max-height:29svh;
+  }
+
+  .outside-caption{
+    margin-top:8px;
+  }
+
+  .outside-caption h2{
+    font-size:1.35rem;
+  }
+
+  .outside-caption p{
+    font-size:.72rem;
+    line-height:1.35;
   }
 
   .letter p{
@@ -515,15 +878,32 @@ p{
 </style>
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     PARTICLES
+====================================================== -->
 
 <div id="particles"></div>
 
-<section class="screen active" id="intro">
-  <div class="wrap">
-    <div class="k">A little story about us</div>
 
-    <h1>For my Guguru Girl</h1>
+<!-- =====================================================
+     INTRO
+====================================================== -->
+
+<section class="screen active" id="intro">
+
+  <div class="wrap">
+
+    <div class="k">
+      A little story about us
+    </div>
+
+    <h1>
+      For my Guguru Girl
+    </h1>
 
     <div class="gold-line"></div>
 
@@ -532,19 +912,35 @@ p{
       the love, the hard days and the good days.
     </p>
 
-    <button class="enter" type="button" id="enterStory">
+    <button
+      class="enter"
+      type="button"
+      id="enterStory">
+
       Enter our story →
+
     </button>
+
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     SOBI HILLS
+====================================================== -->
+
 <section class="screen" id="sobi">
+
   <div class="wrap">
 
-    <div class="k">A memory I'll always keep</div>
+    <div class="k">
+      A memory I'll always keep
+    </div>
+
 
     <div class="media">
+
       <video
         src="media/sobi-hill.mp4"
         autoplay
@@ -554,32 +950,42 @@ p{
         preload="auto">
       </video>
 
-      <div class="caption">
-        <h2>Sobi Hills</h2>
-        <p>
-          The day I stayed back with you, held your hand,
-          guided you up and made sure you got there safely.
-        </p>
-      </div>
+    </div>
+
+
+    <div class="outside-caption">
+
+      <h2>
+        Sobi Hills
+      </h2>
+
+      <p>
+        The day I stayed back with you, held your hand,
+        guided you up and made sure you got there safely.
+      </p>
+
     </div>
 
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     SINNERS / CINEMA
+====================================================== -->
+
 <section class="screen" id="sinners">
+
   <div class="wrap">
 
-    <div class="k">One of our little moments</div>
+    <div class="k">
+      One of our little moments
+    </div>
 
-    <h2>Sinners</h2>
-
-    <p>
-      Our first unofficial date. A movie, a little excuse to be close,
-      and one of those moments that became a memory without us even trying.
-    </p>
 
     <div class="media">
+
       <video
         src="media/sinners.mp4"
         autoplay
@@ -588,41 +994,81 @@ p{
         playsinline
         preload="auto">
       </video>
+
+    </div>
+
+
+    <div class="outside-caption">
+
+      <h2>
+        Sinners
+      </h2>
+
+      <p>
+        Our first unofficial date. A movie, a little excuse
+        to be close, and one of those moments that became
+        a memory without us even trying.
+      </p>
+
     </div>
 
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     ALONG THE WAY
+====================================================== -->
+
 <section class="screen" id="us">
+
   <div class="wrap">
 
-    <div class="k">US</div>
+    <div class="k">
+      US
+    </div>
 
-    <div
-      class="media"
-      style="height:min(54vh,560px);margin-bottom:18px">
+
+    <div class="media">
 
       <img
         src="media/along-the-way.jpg"
         alt="A memory from our story">
+
     </div>
 
-    <h2>Somewhere along the way, you became home.</h2>
 
-    <p>
-      We became us, had beautiful days, difficult days,
-      and somehow kept finding our way back to each other.
-    </p>
+    <div class="outside-caption">
+
+      <h2>
+        Somewhere along the way, you became home.
+      </h2>
+
+      <p>
+        We became us, had beautiful days, difficult days,
+        and somehow kept finding our way back to each other.
+      </p>
+
+    </div>
 
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     BIRTHDAY SURPRISE
+====================================================== -->
+
 <section class="screen" id="surprise">
+
   <div class="wrap">
 
-    <div class="k">21 · 07 · 2026</div>
+    <div class="k">
+      21 · 07 · 2026
+    </div>
+
 
     <div class="media">
 
@@ -630,37 +1076,56 @@ p{
         src="media/birthday-surprise.jpg"
         alt="The birthday surprise">
 
-      <div class="caption">
-        <h2>You planned this behind my back.</h2>
+    </div>
 
-        <p>
-          You quietly planned a surprise with your friends without me
-          knowing anything about it, and somehow you took one of the
-          worst moments of my life and made it one of the best times
-          of my life. I appreciate you more than I can properly explain.
-        </p>
-      </div>
+
+    <div class="outside-caption">
+
+      <h2>
+        You planned this behind my back.
+      </h2>
+
+      <p>
+        You quietly planned a surprise with your friends
+        without me knowing anything about it, and somehow
+        you took one of the worst moments of my life and
+        made it one of the best times of my life.
+        I appreciate you more than I can properly explain.
+      </p>
 
     </div>
 
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     HEARTFELT LETTER
+====================================================== -->
+
 <section class="screen" id="letterScreen">
+
   <div class="wrap">
 
-    <div class="k">For the woman I love</div>
+    <div class="k">
+      For the woman I love
+    </div>
+
 
     <div class="letter">
 
-      <p><strong>My love</strong></p>
+      <p>
+        <strong>My love</strong>
+      </p>
+
 
       <p>
         We’ve come a long way since our first encounter a few years back
         and I find myself falling in love with you, every single day,
         over and over again.
       </p>
+
 
       <p>
         I love how deeply you care about the people you love, like not
@@ -670,6 +1135,7 @@ p{
         feel better even when you have your own things going on.
       </p>
 
+
       <p>
         You have this way of making me feel like I don’t have to have
         everything figured out at all times, and that means more to me
@@ -678,12 +1144,14 @@ p{
         the woman you’re constantly becoming.
       </p>
 
+
       <p>
         I want to see you win, I want to see Ember &amp; Spice become
         something we’re proud of, and I want to see you achieve the
         things you’ve told me about and the things you haven’t even
         thought of yet.
       </p>
+
 
       <p>
         Thank you for loving me the way you do, thank you for celebrating
@@ -696,6 +1164,7 @@ p{
         don’t even remember but I do.
       </p>
 
+
       <p>
         Thank you for always giving me hope and engaging me with prayers
         and fasting when I feel like everything is going south. When I
@@ -704,12 +1173,14 @@ p{
         can properly explain.
       </p>
 
+
       <p>
         You’re such a visionary young lady with potentials, and I pray
         that Allah protects your heart and gives you peace, happiness
         and success in everything you set your hands on, and gives you
         the strength to become everything you’re meant to be ❤️.
       </p>
+
 
       <p>
         Thank you for always listening to me my lady, I am genuinely
@@ -718,7 +1189,11 @@ p{
         it enough,
       </p>
 
-      <p><strong>I Love You</strong></p>
+
+      <p>
+        <strong>I Love You</strong>
+      </p>
+
 
       <p>
         Not just when things are easy, not just when everything is going
@@ -728,7 +1203,13 @@ p{
         everything is perfect.
       </p>
 
-      <p><strong>It has become a part of me.</strong></p>
+
+      <p>
+        <strong>
+          It has become a part of me.
+        </strong>
+      </p>
+
 
       <p>
         Happy 20th birthday my darling, and I hope this year gives you
@@ -737,47 +1218,77 @@ p{
         were cheering for you along the way!
       </p>
 
+
       <p>
         I’ll always be your #1 supporter.
       </p>
 
+
       <p class="close">
+
         I love you, Guguru girl.
+
         <br><br>
+
         My C.E.O to be ❤️
+
       </p>
 
     </div>
+
   </div>
+
 </section>
 
+
+<!-- =====================================================
+     BIRTHDAY
+====================================================== -->
 
 <section class="screen" id="birthday">
 
   <div class="burst"></div>
 
+
   <div class="wrap">
 
-    <div class="heart">♡</div>
+    <div class="heart">
+      ♡
+    </div>
 
-    <div class="k">Today, you are</div>
+    <div class="k">
+      Today, you are
+    </div>
 
-    <div class="num">20</div>
+    <div class="num">
+      20
+    </div>
 
-    <h2>Happy 20th Birthday, my love.</h2>
+    <h2>
+      Happy 20th Birthday, my love.
+    </h2>
 
     <p>
       May this be the beginning of a beautiful new year of your life.
     </p>
 
   </div>
+
 </section>
 
 
+<!-- =====================================================
+     FINAL
+====================================================== -->
+
 <section class="screen" id="final">
+
   <div class="wrap">
 
-    <div class="k">Forever us</div>
+    <div class="k">
+      Forever us
+    </div>
+
 
     <div class="media">
 
@@ -787,16 +1298,28 @@ p{
 
     </div>
 
-    <h2>And this is only the beginning.</h2>
 
-    <p>
-      More memories, more laughter, more ordinary days,
-      and more reasons to choose you.
-    </p>
+    <div class="outside-caption">
+
+      <h2>
+        And this is only the beginning.
+      </h2>
+
+      <p>
+        More memories, more laughter, more ordinary days,
+        and more reasons to choose you.
+      </p>
+
+    </div>
 
   </div>
+
 </section>
 
+
+<!-- =====================================================
+     BACKGROUND MUSIC
+====================================================== -->
 
 <audio
   id="music"
@@ -806,8 +1329,16 @@ p{
 </audio>
 
 
+<!-- =====================================================
+     NAVIGATION DOTS
+====================================================== -->
+
 <div id="dots"></div>
 
+
+<!-- =====================================================
+     ARROWS
+====================================================== -->
 
 <div id="nav">
 
@@ -815,151 +1346,211 @@ p{
     type="button"
     id="prevBtn"
     aria-label="Previous">
+
     ←
+
   </button>
+
 
   <button
     type="button"
     id="nextBtn"
     aria-label="Next">
+
     →
+
   </button>
 
 </div>
 
 
+<!-- =====================================================
+     MUSIC STATUS
+====================================================== -->
+
 <div
   id="musicStatus"
   onclick="toggleMusic()">
-  ♫ <span id="musicText">music</span>
+
+  ♫
+
+  <span id="musicText">
+    music
+  </span>
+
 </div>
 
 
 <script>
-(function () {
+
+(function(){
 
   "use strict";
 
+
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
   const screens =
-    Array.from(document.querySelectorAll(".screen"));
+    Array.from(
+      document.querySelectorAll(".screen")
+    );
+
 
   const dots =
     document.getElementById("dots");
 
+
   const music =
     document.getElementById("music");
+
 
   const musicText =
     document.getElementById("musicText");
 
+
   const enterStory =
     document.getElementById("enterStory");
+
 
   const prevBtn =
     document.getElementById("prevBtn");
 
+
   const nextBtn =
     document.getElementById("nextBtn");
+
 
   const particles =
     document.getElementById("particles");
 
 
   let index = 0;
+
   let startX = 0;
 
 
-  /*
-    CREATE TOP PROGRESS DOTS
-  */
+  /* =====================================================
+     CREATE DOTS
+  ===================================================== */
 
-  screens.forEach(function (_, i) {
+  screens.forEach(function(_,i){
 
     const dot =
       document.createElement("span");
 
+
     dot.className =
-      "dot" + (i === 0 ? " active" : "");
+      "dot" +
+      (
+        i === 0
+          ? " active"
+          : ""
+      );
+
 
     dot.setAttribute(
       "aria-label",
       "Go to section " + (i + 1)
     );
 
+
     dot.addEventListener(
       "click",
-      function () {
+      function(){
+
         go(i);
+
       }
     );
+
 
     dots.appendChild(dot);
 
   });
 
 
-  /*
-    FLOATING PARTICLES
-  */
+  /* =====================================================
+     CREATE PARTICLES
+  ===================================================== */
 
-  for (let i = 0; i < 34; i++) {
+  for(
+    let i = 0;
+    i < 34;
+    i++
+  ){
 
     const p =
       document.createElement("i");
 
-    p.className = "particle";
+
+    p.className =
+      "particle";
+
 
     p.style.left =
       Math.random() * 100 + "%";
 
+
     p.style.animationDuration =
-      8 + Math.random() * 13 + "s";
+      8 +
+      Math.random() * 13 +
+      "s";
+
 
     p.style.animationDelay =
-      -Math.random() * 18 + "s";
+      -Math.random() * 18 +
+      "s";
+
 
     particles.appendChild(p);
 
   }
 
 
-  /*
-    UPDATE DOTS
-  */
+  /* =====================================================
+     DOT UPDATE
+  ===================================================== */
 
-  function updateDots() {
+  function updateDots(){
 
-    Array.from(dots.children)
-      .forEach(function (dot, i) {
+    Array.from(
+      dots.children
+    ).forEach(function(dot,i){
 
-        dot.classList.toggle(
-          "active",
-          i === index
-        );
+      dot.classList.toggle(
+        "active",
+        i === index
+      );
 
-      });
+    });
 
   }
 
 
-  /*
-    MUSIC
-  */
+  /* =====================================================
+     MUSIC
+  ===================================================== */
 
-  function startMusic() {
+  function startMusic(){
 
-    if (!music) return;
+    if(!music){
+      return;
+    }
 
-    music.volume = 0.20;
+
+    music.volume = .20;
+
 
     music.play()
-      .then(function () {
+      .then(function(){
 
         musicText.textContent =
           "playing";
 
       })
-      .catch(function () {
+      .catch(function(){
 
         musicText.textContent =
           "tap for music";
@@ -969,15 +1560,18 @@ p{
   }
 
 
-  function toggleMusic() {
+  function toggleMusic(){
 
-    if (!music) return;
+    if(!music){
+      return;
+    }
 
-    if (music.paused) {
+
+    if(music.paused){
 
       startMusic();
 
-    } else {
+    }else{
 
       music.pause();
 
@@ -989,43 +1583,63 @@ p{
   }
 
 
-  /*
-    BIRTHDAY CONFETTI
-  */
+  /* =====================================================
+     CONFETTI
+  ===================================================== */
 
-  function birthdayBurst() {
+  function birthdayBurst(){
 
     const burst =
       document.querySelector(
         "#birthday .burst"
       );
 
-    if (!burst) return;
+
+    if(!burst){
+      return;
+    }
+
 
     burst.innerHTML = "";
 
-    for (let n = 0; n < 32; n++) {
+
+    for(
+      let n = 0;
+      n < 32;
+      n++
+    ){
 
       const c =
         document.createElement("i");
 
+
       c.className =
         "confetti";
 
+
       c.style.setProperty(
         "--x",
-        Math.random() * 700 - 350 + "px"
+        Math.random() * 700 -
+        350 +
+        "px"
       );
+
 
       c.style.setProperty(
         "--y",
-        Math.random() * 520 - 260 + "px"
+        Math.random() * 520 -
+        260 +
+        "px"
       );
+
 
       c.style.setProperty(
         "--r",
-        Math.random() * 900 - 450 + "deg"
+        Math.random() * 900 -
+        450 +
+        "deg"
       );
+
 
       c.style.background =
         n % 3 === 0
@@ -1034,8 +1648,11 @@ p{
             ? "#fff"
             : "#b88a45";
 
+
       c.style.animationDelay =
-        Math.random() * .18 + "s";
+        Math.random() * .18 +
+        "s";
+
 
       burst.appendChild(c);
 
@@ -1044,14 +1661,11 @@ p{
   }
 
 
-  /*
-    MAIN SCREEN NAVIGATION
+  /* =====================================================
+     MAIN NAVIGATION
+  ===================================================== */
 
-    This is deliberately defined before
-    the Enter Our Story button is used.
-  */
-
-  function go(n) {
+  function go(n){
 
     n =
       Math.max(
@@ -1063,10 +1677,12 @@ p{
       );
 
 
-    if (
+    if(
       n === index &&
-      screens[n].classList.contains("active")
-    ) {
+      screens[n].classList.contains(
+        "active"
+      )
+    ){
 
       return;
 
@@ -1076,80 +1692,101 @@ p{
     const old =
       screens[index];
 
-    old.classList.remove("active");
 
-    old.classList.add("leaving");
+    old.classList.remove(
+      "active"
+    );
 
 
-    setTimeout(function () {
+    old.classList.add(
+      "leaving"
+    );
 
-      old.classList.remove("leaving");
 
-    }, 750);
+    setTimeout(
+      function(){
+
+        old.classList.remove(
+          "leaving"
+        );
+
+      },
+      750
+    );
 
 
     index = n;
 
-    screens[index]
-      .classList.add("active");
+
+    screens[index].classList.add(
+      "active"
+    );
 
 
     updateDots();
 
 
-    /*
-      Automatically start muted
-      videos when their screen appears.
-    */
+    /* ---------------------------------------------
+       RESET AND PLAY CURRENT VIDEOS
+    --------------------------------------------- */
 
     screens[index]
       .querySelectorAll("video")
-      .forEach(function (video) {
+      .forEach(function(video){
 
         video.muted = true;
 
         video.currentTime = 0;
 
         video.play()
-          .catch(function () {});
+          .catch(function(){});
 
       });
 
 
-    /*
-      Music starts after the user
-      has interacted with the page.
-    */
+    /* ---------------------------------------------
+       START MUSIC AFTER INTERACTION
+    --------------------------------------------- */
 
-    if (index > 0) {
+    if(index > 0){
 
       startMusic();
 
     }
 
 
-    if (
+    /* ---------------------------------------------
+       BIRTHDAY EFFECT
+    --------------------------------------------- */
+
+    if(
       screens[index].id ===
       "birthday"
-    ) {
+    ){
 
       birthdayBurst();
 
     }
 
 
+    /* ---------------------------------------------
+       LETTER ANIMATION
+    --------------------------------------------- */
+
     const letter =
       screens[index]
         .querySelector(".letter");
 
 
-    if (letter) {
+    if(letter){
 
       letter.classList.remove(
         "reveal"
       );
 
+
       void letter.offsetWidth;
+
 
       letter.classList.add(
         "reveal"
@@ -1160,49 +1797,52 @@ p{
   }
 
 
-  function next() {
+  /* =====================================================
+     NEXT / PREVIOUS
+  ===================================================== */
+
+  function next(){
 
     go(index + 1);
 
   }
 
 
-  function prev() {
+  function prev(){
 
     go(index - 1);
 
   }
 
 
-  /*
-    MAKE FUNCTIONS AVAILABLE
-    TO THE PAGE
-  */
+  /* =====================================================
+     GLOBAL FUNCTIONS
+  ===================================================== */
 
   window.go =
     go;
 
+
   window.next =
     next;
 
+
   window.prev =
     prev;
+
 
   window.toggleMusic =
     toggleMusic;
 
 
-  /*
-    ENTER OUR STORY
-
-    This is the important fix.
-    The button has a direct event listener
-    and does not depend on inline onclick.
-  */
+  /* =====================================================
+     ENTER OUR STORY
+     DIRECT EVENT LISTENER
+  ===================================================== */
 
   enterStory.addEventListener(
     "click",
-    function (event) {
+    function(event){
 
       event.preventDefault();
 
@@ -1214,13 +1854,13 @@ p{
   );
 
 
-  /*
-    ARROW BUTTONS
-  */
+  /* =====================================================
+     ARROW BUTTONS
+  ===================================================== */
 
   prevBtn.addEventListener(
     "click",
-    function () {
+    function(){
 
       prev();
 
@@ -1230,7 +1870,7 @@ p{
 
   nextBtn.addEventListener(
     "click",
-    function () {
+    function(){
 
       next();
 
@@ -1238,18 +1878,18 @@ p{
   );
 
 
-  /*
-    KEYBOARD NAVIGATION
-  */
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
 
   document.addEventListener(
     "keydown",
-    function (event) {
+    function(event){
 
-      if (
+      if(
         event.key === "ArrowRight" ||
         event.key === " "
-      ) {
+      ){
 
         event.preventDefault();
 
@@ -1258,9 +1898,9 @@ p{
       }
 
 
-      if (
+      if(
         event.key === "ArrowLeft"
-      ) {
+      ){
 
         event.preventDefault();
 
@@ -1272,38 +1912,42 @@ p{
   );
 
 
-  /*
-    SWIPE NAVIGATION
-  */
+  /* =====================================================
+     SWIPE
+  ===================================================== */
 
   document.addEventListener(
     "touchstart",
-    function (event) {
+    function(event){
 
       startX =
         event.changedTouches[0].clientX;
 
     },
-    { passive:true }
+    {
+      passive:true
+    }
   );
 
 
   document.addEventListener(
     "touchend",
-    function (event) {
+    function(event){
 
       const dx =
         event.changedTouches[0].clientX -
         startX;
 
 
-      if (Math.abs(dx) > 55) {
+      if(
+        Math.abs(dx) > 55
+      ){
 
-        if (dx < 0) {
+        if(dx < 0){
 
           next();
 
-        } else {
+        }else{
 
           prev();
 
@@ -1312,17 +1956,20 @@ p{
       }
 
     },
-    { passive:true }
+    {
+      passive:true
+    }
   );
 
 
-  /*
-    START ON INTRO
-  */
+  /* =====================================================
+     INITIAL STATE
+  ===================================================== */
 
-  go(0);
+  updateDots();
 
 })();
+
 </script>
 
 </body>
